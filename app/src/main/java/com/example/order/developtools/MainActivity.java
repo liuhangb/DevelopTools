@@ -16,7 +16,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        MyService.addEventProcessor(new TaoBaoEventProcessor(getBaseContext()));
         Intent intent = new Intent(this, MyService.class);
         MainActivity.this.startService(intent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        MyService.removeAllEventProcessor();
     }
 }
