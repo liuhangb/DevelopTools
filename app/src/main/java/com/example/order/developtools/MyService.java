@@ -28,7 +28,7 @@ public class MyService extends AccessibilityService {
         Log.d(TAG, "eventType:" + event.getEventType() +",package name: " + event.getPackageName());
         for (int i = 0; i < mEventProcessor.size(); i++) {
             BaseEventProcessor baseEventProcessor = mEventProcessor.get(i);
-            if (baseEventProcessor.isEnable()) {
+            if (baseEventProcessor.isEnable() && event.getPackageName().equals(baseEventProcessor.desiredPackageName())) {
                 baseEventProcessor.onAccessibilityEvent(event);
             }
         }

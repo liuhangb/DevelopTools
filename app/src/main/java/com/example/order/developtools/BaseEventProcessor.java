@@ -25,6 +25,12 @@ public abstract class BaseEventProcessor {
 
     public abstract boolean isEnable();
 
+    /**
+     * 只接受指定包名的事件
+     * @return
+     */
+    public abstract String desiredPackageName();
+
     public abstract void onAccessibilityEvent(AccessibilityEvent event);
 
     /**

@@ -30,6 +30,11 @@ public class TaoBaoEventProcessor extends BaseEventProcessor{
     }
 
     @Override
+    public String desiredPackageName() {
+        return "com.taobao.taobao";
+    }
+
+    @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
         AccessibilityNodeInfo rootNodeInfo = mService.getRootInActiveWindow();
         if (event.getSource() != null) {
