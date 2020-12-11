@@ -14,16 +14,12 @@ import java.util.List;
  */
 public class MyService extends AccessibilityService {
     private final String TAG = "MyService";
-    private static final List<BaseEventProcessor> mEventProcessor = new ArrayList<>();
+    private final List<BaseEventProcessor> mEventProcessor = new ArrayList<>();
 
     private void addEventProcessor(BaseEventProcessor eventProcessor) {
         if (eventProcessor != null && !mEventProcessor.contains(eventProcessor)) {
             mEventProcessor.add(eventProcessor);
         }
-    }
-
-    public static void removeAllEventProcessor() {
-        mEventProcessor.clear();
     }
 
     @Override
