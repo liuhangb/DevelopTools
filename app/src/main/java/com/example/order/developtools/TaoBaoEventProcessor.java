@@ -30,8 +30,8 @@ public class TaoBaoEventProcessor extends BaseEventProcessor{
     }
 
     @Override
-    public void onAccessibilityEvent(AccessibilityEvent event, AccessibilityNodeInfo rootNodeInfo) {
-
+    public void onAccessibilityEvent(AccessibilityEvent event) {
+        AccessibilityNodeInfo rootNodeInfo = mService.getRootInActiveWindow();
         if (event.getSource() != null) {
             // 判断事件页面所在的包名，这里是自己
             if (event.getPackageName() != null && event.getPackageName().equals("com.taobao.taobao")) {

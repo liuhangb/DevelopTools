@@ -30,11 +30,10 @@ public class MyService extends AccessibilityService {
     public void onAccessibilityEvent(AccessibilityEvent event) {
         // 事件页面节点信息不为空
         Log.d(TAG, "eventType:" + event.getEventType() +",package name: " + event.getPackageName());
-        AccessibilityNodeInfo rootInActiveWindow = getRootInActiveWindow();
         for (int i = 0; i < mEventProcessor.size(); i++) {
             BaseEventProcessor baseEventProcessor = mEventProcessor.get(i);
             if (baseEventProcessor.isEnable()) {
-                baseEventProcessor.onAccessibilityEvent(event,rootInActiveWindow);
+                baseEventProcessor.onAccessibilityEvent(event);
             }
         }
 
@@ -60,7 +59,7 @@ public class MyService extends AccessibilityService {
     public void onCreate() {
         super.onCreate();
         Log.d(TAG, "onCreate");
-        addEventProcessor(new TaoBaoEventProcessor(getBaseContext()));
+        addEventProcessor(new TaoBaoEventProcessor(this));
 
     }
 }

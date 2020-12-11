@@ -25,7 +25,7 @@ public abstract class BaseEventProcessor {
 
     public abstract boolean isEnable();
 
-    public abstract void onAccessibilityEvent(AccessibilityEvent event, AccessibilityNodeInfo rootNodInfo);
+    public abstract void onAccessibilityEvent(AccessibilityEvent event);
 
     /**
      * 模拟点击
@@ -57,7 +57,7 @@ public abstract class BaseEventProcessor {
         }
     }
 
-    protected void clickById(AccessibilityNodeInfo root, String id, String widgetType) {
+    protected static void clickById(AccessibilityNodeInfo root, String id, String widgetType) {
         // 事件页面节点信息不为空
         if (root != null) {
             // 根据Text搜索所有符合条件的节点, 模糊搜索方式; 还可以通过ID来精确搜索findAccessibilityNodeInfosByViewId
@@ -79,6 +79,37 @@ public abstract class BaseEventProcessor {
             }
         }
     }
+
+    /**
+     * 可以自定义action
+     * @param root
+     * @param id
+     * @param widgetType
+     * @param action
+     */
+    protected static void clickById(AccessibilityNodeInfo root, String id, String widgetType, int action) {
+        // 事件页面节点信息不为空
+        if (root != null) {
+            // 根据Text搜索所有符合条件的节点, 模糊搜索方式; 还可以通过ID来精确搜索findAccessibilityNodeInfosByViewId
+            List<AccessibilityNodeInfo> stop_nodes = root.findAccessibilityNodeInfosByViewId(id);
+            // 遍历节点
+            if (stop_nodes != null && !stop_nodes.isEmpty()) {
+                AccessibilityNodeInfo node;
+                for (int i = 0; i < stop_nodes.size(); i++) {
+                    node = stop_nodes.get(i);
+                    // 判断按钮类型
+                    if (node.getClassName().equals(widgetType)) {
+                        // 可用则模拟点击
+                        if (node.isEnabled()) {
+                            node.performAction(action);
+                            Toast.makeText(mContext, "辅助功能已经检测到: "+ id, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 
     /**
      * 检查对应的内容是否存在
