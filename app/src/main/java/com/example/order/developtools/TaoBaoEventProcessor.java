@@ -20,6 +20,8 @@ public class TaoBaoEventProcessor extends BaseEventProcessor{
     private Map<String, AccessibilityNodeInfo> mEventMap =  new HashMap<>(10);
     public TaoBaoEventProcessor(@NonNull Context context) {
         super(context);
+    public TaoBaoEventProcessor(@NonNull AccessibilityService service) {
+        super(service);
     }
 
     @Override

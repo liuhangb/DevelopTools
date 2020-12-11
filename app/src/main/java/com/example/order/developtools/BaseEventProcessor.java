@@ -1,5 +1,6 @@
 package com.example.order.developtools;
 
+import android.accessibilityservice.AccessibilityService;
 import android.content.Context;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
@@ -14,10 +15,12 @@ import java.util.List;
  */
 public abstract class BaseEventProcessor {
     protected static final String TAG = BaseEventProcessor.class.getSimpleName();
-    protected Context mContext;
+    protected static Context mContext;
+    protected AccessibilityService mService;
 
-    public BaseEventProcessor(@NonNull Context context) {
-        mContext = context;
+    public BaseEventProcessor(@NonNull AccessibilityService service) {
+        mService = service;
+        mContext = service.getBaseContext();
     }
 
     public abstract boolean isEnable();

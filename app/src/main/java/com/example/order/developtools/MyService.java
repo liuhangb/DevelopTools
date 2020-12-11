@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +16,7 @@ public class MyService extends AccessibilityService {
     private final String TAG = "MyService";
     private static final List<BaseEventProcessor> mEventProcessor = new ArrayList<>();
 
-    public static void addEventProcessor(BaseEventProcessor eventProcessor) {
+    private void addEventProcessor(BaseEventProcessor eventProcessor) {
         if (eventProcessor != null && !mEventProcessor.contains(eventProcessor)) {
             mEventProcessor.add(eventProcessor);
         }
@@ -31,7 +29,7 @@ public class MyService extends AccessibilityService {
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
         // 事件页面节点信息不为空
-        Log.d(TAG, "the source:" + event.getSource());
+        Log.d(TAG, "eventType:" + event.getEventType() +",package name: " + event.getPackageName());
         AccessibilityNodeInfo rootInActiveWindow = getRootInActiveWindow();
         for (int i = 0; i < mEventProcessor.size(); i++) {
             BaseEventProcessor baseEventProcessor = mEventProcessor.get(i);
@@ -62,5 +60,7 @@ public class MyService extends AccessibilityService {
     public void onCreate() {
         super.onCreate();
         Log.d(TAG, "onCreate");
+        addEventProcessor(new TaoBaoEventProcessor(getBaseContext()));
+
     }
 }
