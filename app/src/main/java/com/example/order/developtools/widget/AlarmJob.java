@@ -44,24 +44,19 @@ public class AlarmJob {
 
         PendingIntent alarmIntent = PendingIntent.getBroadcast(mContext, 0, intent, 0);
 
-        long time2 = dateToStamp(date);
+        long time2 = DateUtils.dateToStamp(date);
         Log.d(TAG, "getTimeInMillis: " + time2);
         alarmMgr.setExact(AlarmManager.RTC_WAKEUP, time2,
                 alarmIntent);
     }
 
-    /*
-     * 将时间转换为时间戳
-     */
-    private static long dateToStamp(String s) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = null;
-        try {
-            date = simpleDateFormat.parse(s);
-        } catch (ParseException e) {
-            e.printStackTrace();
+    public static class AlarmReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d(TAG, "AlarmReceiver onReceive====");
+            if (mRunnable != null) {
+                mRunnable.run();
+            }
         }
-        long ts = date == null ? 0 : date.getTime();
-        return ts;
     }
 }
