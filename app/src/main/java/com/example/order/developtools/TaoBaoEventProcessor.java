@@ -26,18 +26,25 @@ import java.util.Map;
 /**
  * Created by lh, 2020/12/9
  */
-public class TaoBaoEventProcessor extends BaseEventProcessor {
+public class TaoBaoEventProcessor extends BaseEventProcessor implements TaoBaoConfig.ConfigCallback {
 
     private Map<String, AccessibilityNodeInfo> mEventMap = new HashMap<>(10);
     private final int MAX_RETRY_COUNT = 5;
     private int mRetryCount;
-    private final String JOB_TIME = "2020-12-14 15:16:00";
-    private final String JOB_EXPIRED_TIME = "2020-12-14 15:17:00";
+    private final AlarmJob mAlarmJob;
 
     public TaoBaoEventProcessor(@NonNull AccessibilityService service) {
         super(service);
-        AlarmJob alarmJob = new AlarmJob(mContext, mAlarmRunnable);
-        alarmJob.start(JOB_TIME);
+        String mTaskTime = TaoBaoConfig.Companion.getMTaskTime();
+        mAlarmJob = new AlarmJob(mContext, mAlarmRunnable);
+
+        mAlarmJob.start(mTaskTime);
+    }
+
+    @Override
+    public void onTaskTimeChanged(String date) {
+        mAlarmJob.cancel();
+        mAlarmJob.start(date);
     }
 
     @Override
@@ -58,11 +65,12 @@ public class TaoBaoEventProcessor extends BaseEventProcessor {
         }
 //                clickById(mNodeInfo, "com.taobao.taobao:id/button_cart_charge", TextView.class.getName());
 
+        handleTooManyPeople();
         boolean isContainInvalidDesc = checkContentByText(rootNodeInfo, "失效宝贝", TextView.class.getName());
         if (isContainInvalidDesc) {
             clickById(rootNodeInfo, "com.taobao.taobao:id/btn_back", TextView.class.getName());
             if (!isExpired()) {
-                ThreadUtils.runOnMainUI(mAlarmRunnable, 200);
+                ThreadUtils.runOnMainUI(mAlarmRunnable, 500);
             }
             mRetryCount++;
         } else {
@@ -92,8 +100,17 @@ public class TaoBaoEventProcessor extends BaseEventProcessor {
 //    }
 
     private boolean isExpired() {
-        long expiredTime = DateUtils.dateToStamp(JOB_EXPIRED_TIME);
+        String mTaskTime = TaoBaoConfig.Companion.getMTaskTime();
+        long expiredTime = DateUtils.dateToStamp(mTaskTime) + 60 * 1000;
         return System.currentTimeMillis() > expiredTime;
+    }
+
+    /**
+     * 处理前方拥挤提示
+     */
+    private void handleTooManyPeople() {
+        AccessibilityNodeInfo rootInActiveWindow = mService.getRootInActiveWindow();
+        clickByCustomText(rootInActiveWindow, "我知道了", TextView.class.getName());
     }
 
     private Runnable mAlarmRunnable = new Runnable() {

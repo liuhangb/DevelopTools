@@ -57,7 +57,14 @@ public class MyService extends AccessibilityService {
     public void onCreate() {
         super.onCreate();
         Log.d(TAG, "onCreate");
-        addEventProcessor(new TaoBaoEventProcessor(this));
+        TaoBaoEventProcessor taoBaoEventProcessor = new TaoBaoEventProcessor(this);
+        TaoBaoConfig.Companion.register(taoBaoEventProcessor);
+        addEventProcessor(taoBaoEventProcessor);
+    }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        TaoBaoConfig.Companion.removeAll();
     }
 }

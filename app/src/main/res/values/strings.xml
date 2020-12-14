@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">developTools</string>
+    <string name="taobao_purchase_task_time_setting">配置淘宝抢购定时任务时间</string>
 </resources>
