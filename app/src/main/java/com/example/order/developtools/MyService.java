@@ -2,6 +2,7 @@ package com.example.order.developtools;
 
 import android.accessibilityservice.AccessibilityService;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
@@ -28,7 +29,8 @@ public class MyService extends AccessibilityService {
         Log.d(TAG, "eventType:" + event.getEventType() +",package name: " + event.getPackageName());
         for (int i = 0; i < mEventProcessor.size(); i++) {
             BaseEventProcessor baseEventProcessor = mEventProcessor.get(i);
-            if (baseEventProcessor.isEnable() && event.getPackageName().equals(baseEventProcessor.desiredPackageName())) {
+            CharSequence packageName = event.getPackageName();
+            if (baseEventProcessor.isEnable() && !TextUtils.isEmpty(packageName) && packageName.equals(baseEventProcessor.desiredPackageName())) {
                 baseEventProcessor.onAccessibilityEvent(event);
             }
         }
