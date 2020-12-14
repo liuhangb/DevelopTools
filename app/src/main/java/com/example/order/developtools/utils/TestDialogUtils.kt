@@ -3,8 +3,10 @@ package com.example.order.developtools.utils
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.DialogInterface
+import android.text.SpannableStringBuilder
 import android.text.TextUtils
 import android.widget.EditText
+import java.lang.StringBuilder
 
 /**
  * Created by hzy, 2019/10/16
@@ -37,6 +39,24 @@ class TestDialogUtils private constructor() {
          */
             val editText = EditText(activity)
             editText.hint = hint
+            val inputDialog = AlertDialog.Builder(activity)
+            inputDialog.setTitle(title).setView(editText)
+            inputDialog.setPositiveButton("确定"
+            ) { dialog, which -> callback.onClick(editText.text.toString()) }.show()
+        }
+
+        /**
+         * 打开输入弹窗
+         *
+         * @param activity
+         * @param callback
+         */
+        fun showInputDialog(activity: Activity, title: String, hint: String, text: String, callback: InputDialogCallback) {
+            /*@setView 装入一个EditView
+         */
+            val editText = EditText(activity)
+            editText.hint = hint
+            editText.text = SpannableStringBuilder(text)
             val inputDialog = AlertDialog.Builder(activity)
             inputDialog.setTitle(title).setView(editText)
             inputDialog.setPositiveButton("确定"
