@@ -23,6 +23,7 @@ public class AlarmJob {
 
     private Context mContext;
     private static Runnable mRunnable;
+    private PendingIntent mPendingIntent;
 
     public AlarmJob(Context context, Runnable runnable) {
         mContext = context;
@@ -42,12 +43,17 @@ public class AlarmJob {
         AlarmManager alarmMgr = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(mContext, AlarmReceiver.class);
 
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(mContext, 0, intent, 0);
+        mPendingIntent = PendingIntent.getBroadcast(mContext, 0, intent, 0);
 
         long time2 = DateUtils.dateToStamp(date);
         Log.d(TAG, "getTimeInMillis: " + time2);
         alarmMgr.setExact(AlarmManager.RTC_WAKEUP, time2,
-                alarmIntent);
+                mPendingIntent);
+    }
+
+    public void cancel() {
+        AlarmManager alarmMgr = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+        alarmMgr.cancel(mPendingIntent);
     }
 
     public static class AlarmReceiver extends BroadcastReceiver {
