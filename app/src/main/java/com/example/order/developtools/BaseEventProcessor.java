@@ -2,6 +2,7 @@ package com.example.order.developtools;
 
 import android.accessibilityservice.AccessibilityService;
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.Toast;
@@ -199,5 +200,54 @@ public abstract class BaseEventProcessor {
             root.recycle();
         }
 
+    }
+
+    /**
+     * 通过同一层级node辅助，找到目标node
+     * @param rootInActiveWindow
+     * @param flatNodeText
+     * @param className
+     * @return
+     */
+    protected AccessibilityNodeInfo findDestNodeByFlatNode(AccessibilityNodeInfo rootInActiveWindow,
+                                             String flatNodeText, String className) {
+        if (rootInActiveWindow == null || TextUtils.isEmpty(flatNodeText) || TextUtils.isEmpty(className)) {
+            return null;
+        }
+
+        boolean isExit = false;
+        for (int i = 0; i < rootInActiveWindow.getChildCount(); i++) {
+            AccessibilityNodeInfo child = rootInActiveWindow.getChild(i);
+            if (child == null) {
+                continue;
+            }
+
+            if (flatNodeText.equals(child.getText()) || flatNodeText.equals(child.getContentDescription())) {
+                isExit = true;
+                break;
+            } else {
+                AccessibilityNodeInfo destNodeByFlatNode = findDestNodeByFlatNode(child, flatNodeText, className);
+                if (destNodeByFlatNode != null) {
+                    return destNodeByFlatNode;
+                }
+            }
+        }
+
+        if (!isExit) {
+            return null;
+        }
+
+        for (int i = 0; i < rootInActiveWindow.getChildCount(); i++) {
+            AccessibilityNodeInfo child = rootInActiveWindow.getChild(i);
+            if (child == null) {
+                continue;
+            }
+            if (className.equals(child.getClassName())) {
+                return child;
+            }
+        }
+
+        return null;
+        
     }
 }
