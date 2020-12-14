@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.example.order.developtools.TaoBaoEventProcessor;
+import com.example.order.developtools.utils.DateUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -18,27 +19,28 @@ import java.util.Date;
  * 定时任务
  */
 public class AlarmJob {
-    private final String TAG = "AlarmJob";
+    private static final String TAG = "AlarmJob";
 
     private Context mContext;
+    private static Runnable mRunnable;
 
-    public AlarmJob(Context context) {
+    public AlarmJob(Context context, Runnable runnable) {
         mContext = context;
+        mRunnable = runnable;
     }
 
     /**
      * 启动定时任务
      * @param date 格式："2020-12-10 11:40:00"
-     * @param broadcastReceiver 提供广播接受者
      */
-    public void start(String date, Class broadcastReceiver) {
+    public void start(String date) {
         if (mContext == null) {
             Log.e(TAG, "AlarmJob start failed, because of context null");
             return;
         }
 
         AlarmManager alarmMgr = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(mContext, broadcastReceiver);
+        Intent intent = new Intent(mContext, AlarmReceiver.class);
 
         PendingIntent alarmIntent = PendingIntent.getBroadcast(mContext, 0, intent, 0);
 
