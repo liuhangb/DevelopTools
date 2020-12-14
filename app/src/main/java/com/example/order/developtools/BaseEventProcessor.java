@@ -15,7 +15,7 @@ import java.util.List;
  */
 public abstract class BaseEventProcessor {
     protected static final String TAG = BaseEventProcessor.class.getSimpleName();
-    protected static Context mContext;
+    protected Context mContext;
     protected AccessibilityService mService;
 
     public BaseEventProcessor(@NonNull AccessibilityService service) {
@@ -63,7 +63,7 @@ public abstract class BaseEventProcessor {
         }
     }
 
-    protected static void clickById(AccessibilityNodeInfo root, String id, String widgetType) {
+    protected void clickById(AccessibilityNodeInfo root, String id, String widgetType) {
         // 事件页面节点信息不为空
         if (root != null) {
             // 根据Text搜索所有符合条件的节点, 模糊搜索方式; 还可以通过ID来精确搜索findAccessibilityNodeInfosByViewId
@@ -93,7 +93,7 @@ public abstract class BaseEventProcessor {
      * @param widgetType
      * @param action
      */
-    protected static void clickById(AccessibilityNodeInfo root, String id, String widgetType, int action) {
+    protected void clickById(AccessibilityNodeInfo root, String id, String widgetType, int action) {
         // 事件页面节点信息不为空
         if (root != null) {
             // 根据Text搜索所有符合条件的节点, 模糊搜索方式; 还可以通过ID来精确搜索findAccessibilityNodeInfosByViewId
