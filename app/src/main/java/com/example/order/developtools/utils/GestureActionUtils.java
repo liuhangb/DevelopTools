@@ -18,20 +18,17 @@ public class GestureActionUtils {
      * @param service
      * @param callback
      */
-    public static void performSwipeDown(AccessibilityService service, AccessibilityService.GestureResultCallback callback) {
+    public static void performSwipeDown(AccessibilityService service, int start, int end, AccessibilityService.GestureResultCallback callback) {
         if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.N || service == null) {
             return;
         }
         Context baseContext = service.getBaseContext();
         DisplayMetrics displayMetrics = baseContext.getResources().getDisplayMetrics();
-        final int height = displayMetrics.heightPixels;
-        final int top = (int) (height * .25);
-        final int bottom = (int) (height * .75);
         final int midX = displayMetrics.widthPixels / 2;
         GestureDescription.Builder gestureBuilder =  new GestureDescription.Builder();
         Path path = new Path();
-        path.moveTo(midX, top);
-        path.lineTo(midX, bottom);
+        path.moveTo(midX, start);
+        path.lineTo(midX, end);
         gestureBuilder.addStroke(new GestureDescription.StrokeDescription(path, 100, 1000));
         service.dispatchGesture(gestureBuilder.build(), callback, null);
     }
