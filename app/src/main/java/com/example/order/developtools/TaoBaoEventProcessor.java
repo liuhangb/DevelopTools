@@ -1,27 +1,43 @@
 package com.example.order.developtools;
 
-import android.content.Context;
+import android.accessibilityservice.AccessibilityService;
+import android.accessibilityservice.GestureDescription;
+import android.os.Build;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
+import com.example.order.developtools.utils.DateUtils;
+import com.example.order.developtools.utils.GestureActionUtils;
+import com.example.order.developtools.utils.PrintUtils;
+import com.example.order.developtools.utils.ThreadUtils;
+import com.example.order.developtools.widget.AlarmJob;
+
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Created by lh, 2020/12/9
  */
-public class TaoBaoEventProcessor extends BaseEventProcessor{
+public class TaoBaoEventProcessor extends BaseEventProcessor {
 
-    private String[] SAVE_EVENT_ID = {"com.taobao.taobao:id/btn_back", "com.taobao.taobao:id/button_cart_charge"};
-    private Map<String, AccessibilityNodeInfo> mEventMap =  new HashMap<>(10);
-    public TaoBaoEventProcessor(@NonNull Context context) {
-        super(context);
+    private Map<String, AccessibilityNodeInfo> mEventMap = new HashMap<>(10);
+    private final int MAX_RETRY_COUNT = 5;
+    private int mRetryCount;
+    private final String JOB_TIME = "2020-12-14 15:16:00";
+    private final String JOB_EXPIRED_TIME = "2020-12-14 15:17:00";
+
     public TaoBaoEventProcessor(@NonNull AccessibilityService service) {
         super(service);
+        AlarmJob alarmJob = new AlarmJob(mContext, mAlarmRunnable);
+        alarmJob.start(JOB_TIME);
     }
 
     @Override
@@ -37,38 +53,113 @@ public class TaoBaoEventProcessor extends BaseEventProcessor{
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
         AccessibilityNodeInfo rootNodeInfo = mService.getRootInActiveWindow();
-        if (event.getSource() != null) {
-            // 判断事件页面所在的包名，这里是自己
-            if (event.getPackageName() != null && event.getPackageName().equals("com.taobao.taobao")) {
+        if (rootNodeInfo == null) {
+            return;
+        }
+//                clickById(mNodeInfo, "com.taobao.taobao:id/button_cart_charge", TextView.class.getName());
 
-                clickById(rootNodeInfo, "com.taobao.taobao:id/button_cart_charge", TextView.class.getName());
-                boolean isContainInvalidDesc = checkContentByText(rootNodeInfo, "失效宝贝", TextView.class.getName());
-                if (isContainInvalidDesc) {
-                    clickById(rootNodeInfo, "com.taobao.taobao:id/btn_back", TextView.class.getName());
-                } else {
-                    clickByCustomText(rootNodeInfo, "提交订单", TextView.class.getName());
-                }
+        boolean isContainInvalidDesc = checkContentByText(rootNodeInfo, "失效宝贝", TextView.class.getName());
+        if (isContainInvalidDesc) {
+            clickById(rootNodeInfo, "com.taobao.taobao:id/btn_back", TextView.class.getName());
+            if (!isExpired()) {
+                ThreadUtils.runOnMainUI(mAlarmRunnable, 200);
+            }
+            mRetryCount++;
+        } else {
+            if (checkContentByText(rootNodeInfo, "提交订单", TextView.class.getName())) {
+                clickByCustomText(rootNodeInfo, "提交订单", TextView.class.getName());
+                mRetryCount = 0;
+            }
 
+        }
 //                boolean isContainPayNow = checkContentByText(event, "立即付款", TextView.class.getName());
 //                Log.d(TAG, "立即付款 :" + isContainPayNow);
-            }
-        } else {
-            Log.d(TAG, "the source = null");
-        }
-
-//        saveEvent(rootNodeInfo);
     }
 
-    private void saveEvent(AccessibilityNodeInfo root) {
-        if (!mEventMap.containsValue(root)) {
-            for (int i = 0; i < SAVE_EVENT_ID.length; i++) {
-                boolean isExit = checkContentById(root, SAVE_EVENT_ID[i], TextView.class.getName());
-                if (isExit) {
-                    mEventMap.put(SAVE_EVENT_ID[i], root);
+//    /**
+//     * 是否需要更新Node
+//     * @param event
+//     * @return
+//     */
+//    private boolean isNeedUpdateNode(AccessibilityEvent event) {
+//        AccessibilityNodeInfo rootInActiveWindow = mService.getRootInActiveWindow();
+//        if (rootInActiveWindow == null || event == null) {
+//            return false;
+//        }
+//
+//        return (TYPE_WINDOW_CONTENT_CHANGED == event.getEventType() && checkContentById(rootInActiveWindow, "com.taobao.taobao:id/button_cart_charge", TextView.class.getName()))
+//                || mNodeInfo == null;
+//    }
+
+    private boolean isExpired() {
+        long expiredTime = DateUtils.dateToStamp(JOB_EXPIRED_TIME);
+        return System.currentTimeMillis() > expiredTime;
+    }
+
+    private Runnable mAlarmRunnable = new Runnable() {
+        @RequiresApi(api = Build.VERSION_CODES.N)
+        @Override
+        public void run() {
+            if (mService != null && mService.getRootInActiveWindow() != null &&
+                    desiredPackageName().equals(mService.getRootInActiveWindow().getPackageName())) {
+                AccessibilityNodeInfo rootInActiveWindow = mService.getRootInActiveWindow();
+                String s = PrintUtils.printNodeInfo(rootInActiveWindow);
+                Log.d(TAG, "printNodeInfo: " + s);
+                // 找到目标
+                AccessibilityNodeInfo destNodeByFlatNode = findDestNodeByFlatNode(rootInActiveWindow, "飞天53度500ml贵州茅台酒（带杯）酱香型白酒单瓶装(不含礼袋)", CheckBox.class.getName());
+                if (destNodeByFlatNode == null) {
+                    DisplayMetrics displayMetrics = mService.getResources().getDisplayMetrics();
+                    final int height = displayMetrics.heightPixels;
+                    final int top = (int) (height * .25);
+                    final int bottom = (int) (height * .75);
+                    GestureActionUtils.performSwipeDown(mService, bottom, top, new AccessibilityService.GestureResultCallback() {
+                        @Override
+                        public void onCompleted(GestureDescription gestureDescription) {
+                            super.onCompleted(gestureDescription);
+                            Log.d(TAG, "ACTION_SCROLL_FORWARD");
+                            ThreadUtils.postOnMainUI(mAlarmRunnable);
+                        }
+                    });
+//                    clickById(rootInActiveWindow, "com.taobao.taobao:id/cart_recycler_view","android.support.v7.widget.RecyclerView",
+//                            AccessibilityNodeInfo.ACTION_SCROLL_FORWARD);
+
+                    return;
                 }
+
+                // 判断目标是否可以选中，如果不能选中则需要下拉刷新界面
+                if (!destNodeByFlatNode.isEnabled()) {
+                    DisplayMetrics displayMetrics = mService.getResources().getDisplayMetrics();
+                    final int height = displayMetrics.heightPixels;
+                    final int top = (int) (height * .25);
+                    final int bottom = (int) (height * .75);
+                    GestureActionUtils.performSwipeDown(mService, top, bottom, new AccessibilityService.GestureResultCallback() {
+                        @Override
+                        public void onCompleted(GestureDescription gestureDescription) {
+                            super.onCompleted(gestureDescription);
+                            // 刷新完, 再重新执行一遍流程
+                            mAlarmRunnable.run();
+                        }
+                    });
+                } else {
+                    if (!destNodeByFlatNode.isChecked()) {
+                        destNodeByFlatNode.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                        // 因为控件有变更，点击结算时，必须要获取最新的getRootInActiveWindow，而且要延迟执行，否则无法生效
+                        ThreadUtils.runOnMainUI(new Runnable() {
+                            @Override
+                            public void run() {
+                                clickById(mService.getRootInActiveWindow(), "com.taobao.taobao:id/button_cart_charge", TextView.class.getName());
+                            }
+                        }, 200);
+                    } else {
+                        clickById(mService.getRootInActiveWindow(), "com.taobao.taobao:id/button_cart_charge", TextView.class.getName());
+
+                    }
+
+                }
+
+
             }
         }
-    }
-
+    };
 
 }
