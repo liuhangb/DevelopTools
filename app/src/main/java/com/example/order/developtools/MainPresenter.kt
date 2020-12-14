@@ -27,7 +27,9 @@ class MainPresenter : ExpandListAdapter.Companion.ItemClickCallback{
 
     private fun handleTaobaoPurchaseTaskTime() {
 
-        TestDialogUtils.showInputDialog(mActivity, mActivity.getString(R.string.taobao_purchase_task_time_setting), "格式: 2020-12-14 16:38:00", object : TestDialogUtils.InputDialogCallback {
+        val mTaskTime = TaoBaoConfig.mTaskTime
+        TestDialogUtils.showInputDialog(mActivity, mActivity.getString(R.string.taobao_purchase_task_time_setting),
+                "格式: 2020-12-14 16:38:00", mTaskTime, object : TestDialogUtils.InputDialogCallback {
             override fun onClick(inputText: String) {
                 TaoBaoConfig.setTaskTime(inputText)
                 Toast.makeText(mActivity, "修改成功", Toast.LENGTH_SHORT).show()
