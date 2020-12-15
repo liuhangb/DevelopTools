@@ -255,4 +255,48 @@ public abstract class BaseEventProcessor {
         return null;
         
     }
+
+    protected List<AccessibilityNodeInfo> findDestNodesByFlatNode(AccessibilityNodeInfo rootInActiveWindow,
+                                                           String flatNodeText, String className) {
+        List<AccessibilityNodeInfo> accessibilityNodeInfos = new ArrayList<>();
+        if (rootInActiveWindow == null || TextUtils.isEmpty(flatNodeText) || TextUtils.isEmpty(className)) {
+            return accessibilityNodeInfos;
+        }
+
+        boolean isExit = false;
+        for (int i = 0; i < rootInActiveWindow.getChildCount(); i++) {
+            AccessibilityNodeInfo child = rootInActiveWindow.getChild(i);
+            if (child == null) {
+                continue;
+            }
+
+            LogUtil.d("findDestNodesByFlatNode", "text:" + child.getText());
+            if ((child.getText() != null && flatNodeText.equals(child.getText().toString())) || (child.getContentDescription() != null && flatNodeText.equals(child.getContentDescription().toString()))) {
+                isExit = true;
+                break;
+            } else {
+                List<AccessibilityNodeInfo> destNodeByFlatNode = findDestNodesByFlatNode(child, flatNodeText, className);
+                if (destNodeByFlatNode != null && destNodeByFlatNode.size() > 0) {
+                    return destNodeByFlatNode;
+                }
+            }
+        }
+
+        if (!isExit) {
+            return accessibilityNodeInfos;
+        }
+
+        for (int i = 0; i < rootInActiveWindow.getChildCount(); i++) {
+            AccessibilityNodeInfo child = rootInActiveWindow.getChild(i);
+            if (child == null) {
+                continue;
+            }
+            if (className.equals(child.getClassName())) {
+                accessibilityNodeInfos.add(child);
+            }
+        }
+
+        return accessibilityNodeInfos;
+
+    }
 }
