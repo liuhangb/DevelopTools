@@ -227,7 +227,7 @@ public abstract class BaseEventProcessor {
                 continue;
             }
 
-            if (flatNodeText.equals(child.getText()) || flatNodeText.equals(child.getContentDescription())) {
+            if (child.getText() != null && flatNodeText.equals(child.getText().toString()) ||  child.getContentDescription() != null && flatNodeText.equals(child.getContentDescription().toString())) {
                 isExit = true;
                 break;
             } else {
