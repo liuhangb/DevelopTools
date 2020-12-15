@@ -33,4 +33,23 @@ public class GestureActionUtils {
         service.dispatchGesture(gestureBuilder.build(), callback, null);
     }
 
+    /**
+     * 执行点击操作
+     * @param service
+     * @param x
+     * @param y
+     * @param callback
+     */
+    public static void performClick(AccessibilityService service, int x, int y, AccessibilityService.GestureResultCallback callback) {
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.N || service == null) {
+            return;
+        }
+        GestureDescription.Builder gestureBuilder =  new GestureDescription.Builder();
+        Path path = new Path();
+        path.moveTo(x, y);
+        path.lineTo(x, y);
+        gestureBuilder.addStroke(new GestureDescription.StrokeDescription(path, 100, 1000));
+        service.dispatchGesture(gestureBuilder.build(), callback, null);
+    }
+
 }
