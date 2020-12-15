@@ -64,7 +64,7 @@ public abstract class BaseEventProcessor {
         }
     }
 
-    protected void clickById(AccessibilityNodeInfo root, String id, String widgetType) {
+    protected boolean clickById(AccessibilityNodeInfo root, String id, String widgetType) {
         // 事件页面节点信息不为空
         if (root != null) {
             // 根据Text搜索所有符合条件的节点, 模糊搜索方式; 还可以通过ID来精确搜索findAccessibilityNodeInfosByViewId
@@ -80,11 +80,14 @@ public abstract class BaseEventProcessor {
                         if (node.isEnabled()) {
                             node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
                             Toast.makeText(mContext, "辅助功能已经检测到: "+ id, Toast.LENGTH_SHORT).show();
+                            return true;
                         }
                     }
                 }
             }
         }
+
+        return false;
     }
 
     /**
@@ -176,7 +179,7 @@ public abstract class BaseEventProcessor {
         return false;
     }
 
-    protected void clickByCustomText(AccessibilityNodeInfo root, String text, String widgetType) {
+    protected boolean clickByCustomText(AccessibilityNodeInfo root, String text, String widgetType) {
         // 事件页面节点信息不为空
         if (root != null) {
             // 根据Text搜索所有符合条件的节点, 模糊搜索方式; 还可以通过ID来精确搜索findAccessibilityNodeInfosByViewId
@@ -190,9 +193,10 @@ public abstract class BaseEventProcessor {
                     // 判断按钮类型
                     if (node.getClassName().equals(widgetType)) {
                         // 可用则模拟点击
-                        if (node.isEnabled()) {
+                        if (node.isEnabled() && node.isClickable()) {
                             node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
                             Toast.makeText(mContext, "辅助功能已经检测到: "+ text, Toast.LENGTH_SHORT).show();
+                            return true;
                         }
                     }
                 }
@@ -200,6 +204,7 @@ public abstract class BaseEventProcessor {
             root.recycle();
         }
 
+        return false;
     }
 
     /**
