@@ -60,6 +60,8 @@ public class MyService extends AccessibilityService {
         TaoBaoEventProcessor taoBaoEventProcessor = new TaoBaoEventProcessor(this);
         TaoBaoConfig.Companion.register(taoBaoEventProcessor);
         addEventProcessor(taoBaoEventProcessor);
+        MeituanEvaluationProcessor meituanEvaluationProcessor = new MeituanEvaluationProcessor(this);
+        addEventProcessor(meituanEvaluationProcessor);
     }
 
     @Override
