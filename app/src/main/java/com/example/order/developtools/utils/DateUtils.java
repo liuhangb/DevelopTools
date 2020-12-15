@@ -23,4 +23,17 @@ public class DateUtils {
         return ts;
     }
 
+    /**
+     * 将时间戳转成日期
+     * @param date
+     * @return
+     */
+
+    public static String stampToDate(Date date) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String time = "";
+        time = simpleDateFormat.format(date);
+
+        return time;
+    }
 }
