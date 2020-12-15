@@ -9,6 +9,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.order.developtools.utils.LogUtil;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -298,5 +301,47 @@ public abstract class BaseEventProcessor {
 
         return accessibilityNodeInfos;
 
+    }
+
+    protected AccessibilityNodeInfo findAccessibilityNodeInfosByViewId(AccessibilityNodeInfo rootNodeInfo, String id, String widgetType) {
+        // 事件页面节点信息不为空
+        if (rootNodeInfo != null) {
+            // 根据Text搜索所有符合条件的节点, 模糊搜索方式; 还可以通过ID来精确搜索findAccessibilityNodeInfosByViewId
+            List<AccessibilityNodeInfo> stop_nodes = rootNodeInfo.findAccessibilityNodeInfosByViewId(id);
+            // 遍历节点
+            if (stop_nodes != null && !stop_nodes.isEmpty()) {
+                AccessibilityNodeInfo node;
+                for (int i = 0; i < stop_nodes.size(); i++) {
+                    node = stop_nodes.get(i);
+                    // 判断按钮类型
+                    if (node.getClassName().equals(widgetType)) {
+                        return node;
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    protected AccessibilityNodeInfo findAccessibilityNodeInfosByText(AccessibilityNodeInfo rootNodeInfo, String text, String widgetType) {
+        // 事件页面节点信息不为空
+        if (rootNodeInfo != null) {
+            // 根据Text搜索所有符合条件的节点, 模糊搜索方式; 还可以通过ID来精确搜索findAccessibilityNodeInfosByViewId
+            List<AccessibilityNodeInfo> stop_nodes = rootNodeInfo.findAccessibilityNodeInfosByText(text);
+            // 遍历节点
+            if (stop_nodes != null && !stop_nodes.isEmpty()) {
+                AccessibilityNodeInfo node;
+                for (int i = 0; i < stop_nodes.size(); i++) {
+                    node = stop_nodes.get(i);
+                    // 判断按钮类型
+                    if (node.getClassName().equals(widgetType)) {
+                        return node;
+                    }
+                }
+            }
+        }
+
+        return null;
     }
 }
