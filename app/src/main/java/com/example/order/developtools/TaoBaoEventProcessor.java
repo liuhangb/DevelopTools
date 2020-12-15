@@ -15,11 +15,11 @@ import androidx.annotation.RequiresApi;
 
 import com.example.order.developtools.utils.DateUtils;
 import com.example.order.developtools.utils.GestureActionUtils;
+import com.example.order.developtools.utils.LogUtil;
 import com.example.order.developtools.utils.PrintUtils;
 import com.example.order.developtools.utils.ThreadUtils;
 import com.example.order.developtools.widget.AlarmJob;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,8 +29,6 @@ import java.util.Map;
 public class TaoBaoEventProcessor extends BaseEventProcessor implements TaoBaoConfig.ConfigCallback {
 
     private Map<String, AccessibilityNodeInfo> mEventMap = new HashMap<>(10);
-    private final int MAX_RETRY_COUNT = 5;
-    private int mRetryCount;
     private final AlarmJob mAlarmJob;
 
     public TaoBaoEventProcessor(@NonNull AccessibilityService service) {
@@ -63,7 +61,7 @@ public class TaoBaoEventProcessor extends BaseEventProcessor implements TaoBaoCo
         if (rootNodeInfo == null) {
             return;
         }
-//                clickById(mNodeInfo, "com.taobao.taobao:id/button_cart_charge", TextView.class.getName());
+//        clickById(mService.getRootInActiveWindow(), "com.taobao.taobao:id/button_cart_charge", TextView.class.getName());
 
         handleTooManyPeople();
         boolean isContainInvalidDesc = checkContentByText(rootNodeInfo, "失效宝贝", TextView.class.getName());
@@ -72,11 +70,9 @@ public class TaoBaoEventProcessor extends BaseEventProcessor implements TaoBaoCo
             if (!isExpired()) {
                 ThreadUtils.runOnMainUI(mAlarmRunnable, 500);
             }
-            mRetryCount++;
         } else {
             if (checkContentByText(rootNodeInfo, "提交订单", TextView.class.getName())) {
                 clickByCustomText(rootNodeInfo, "提交订单", TextView.class.getName());
-                mRetryCount = 0;
             }
 
         }
@@ -102,6 +98,7 @@ public class TaoBaoEventProcessor extends BaseEventProcessor implements TaoBaoCo
     private boolean isExpired() {
         String mTaskTime = TaoBaoConfig.Companion.getMTaskTime();
         long expiredTime = DateUtils.dateToStamp(mTaskTime) + 60 * 1000;
+        LogUtil.d("expiredTime: " + expiredTime);
         return System.currentTimeMillis() > expiredTime;
     }
 
