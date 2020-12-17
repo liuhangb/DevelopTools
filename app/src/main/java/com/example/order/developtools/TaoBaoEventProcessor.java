@@ -3,12 +3,14 @@ package com.example.order.developtools;
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.GestureDescription;
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -20,6 +22,8 @@ import com.example.order.developtools.utils.PrintUtils;
 import com.example.order.developtools.utils.ThreadUtils;
 import com.example.order.developtools.widget.AlarmJob;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,6 +34,7 @@ public class TaoBaoEventProcessor extends BaseEventProcessor implements TaoBaoCo
 
     private Map<String, AccessibilityNodeInfo> mEventMap = new HashMap<>(10);
     private final AlarmJob mAlarmJob;
+    private String mKeyWords = TaoBaoConfig.Companion.getMKeyWords();
 
     public TaoBaoEventProcessor(@NonNull AccessibilityService service) {
         super(service);
@@ -114,13 +119,17 @@ public class TaoBaoEventProcessor extends BaseEventProcessor implements TaoBaoCo
         @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         public void run() {
+            if (TextUtils.isEmpty(mKeyWords)) {
+                Toast.makeText(mContext, "关键词为空", Toast.LENGTH_SHORT).show();
+                return;
+            }
             if (mService != null && mService.getRootInActiveWindow() != null &&
                     desiredPackageName().equals(mService.getRootInActiveWindow().getPackageName())) {
                 AccessibilityNodeInfo rootInActiveWindow = mService.getRootInActiveWindow();
                 String s = PrintUtils.printNodeInfo(rootInActiveWindow);
                 Log.d(TAG, "printNodeInfo: " + s);
                 // 找到目标
-                AccessibilityNodeInfo destNodeByFlatNode = findDestNodeByFlatNode(rootInActiveWindow, "飞天53度500ml贵州茅台酒（带杯）酱香型白酒单瓶装(不含礼袋)", CheckBox.class.getName());
+                AccessibilityNodeInfo destNodeByFlatNode = findDestNodeByFlatNode(rootInActiveWindow, mKeyWords, CheckBox.class.getName());
                 if (destNodeByFlatNode == null) {
                     DisplayMetrics displayMetrics = mService.getResources().getDisplayMetrics();
                     final int height = displayMetrics.heightPixels;
@@ -176,4 +185,8 @@ public class TaoBaoEventProcessor extends BaseEventProcessor implements TaoBaoCo
         }
     };
 
+    @Override
+    public void onKeyWordsChanged(@NotNull String keyWords) {
+        mKeyWords = keyWords;
+    }
 }

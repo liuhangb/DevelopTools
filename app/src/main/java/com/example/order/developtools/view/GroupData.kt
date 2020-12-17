@@ -21,6 +21,7 @@ class GroupData {
             var group = Group("Feature项", 2)
             var childItems = ArrayList<ChildItem>()
             childItems.add(ChildItem(getString(R.string.taobao_purchase_task_time_setting), FeatureConstants.TAO_BAO_PURCHASE_TASK_TIME))
+            childItems.add(ChildItem(getString(R.string.taobao_key_words_setting), FeatureConstants.TAO_BAO_KEY_WORDS))
 
            group.childItems = childItems
             return group

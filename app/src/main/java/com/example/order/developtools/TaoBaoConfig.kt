@@ -13,6 +13,7 @@ class TaoBaoConfig {
     companion object {
         private val mCallbackList: MutableList<ConfigCallback> = ArrayList()
         var mTaskTime: String = "2020-12-14 16:05:00"
+        var mKeyWords: String = "飞天53度500ml贵州茅台酒（带杯）酱香型白酒单瓶装(不含礼袋)"
 
         init {
             // 预设抢购时间每天晚上八点
@@ -41,10 +42,20 @@ class TaoBaoConfig {
                 }
             }
         }
+
+        fun setKeyWords(words: String) {
+            if (mKeyWords != words) {
+                mKeyWords = words
+                for (configCallback in mCallbackList) {
+                    configCallback.onKeyWordsChanged(mKeyWords)
+                }
+            }
+        }
     }
 
     interface ConfigCallback {
         fun onTaskTimeChanged(date: String)
+        fun onKeyWordsChanged(keyWords: String)
     }
 
 

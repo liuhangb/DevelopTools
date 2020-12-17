@@ -22,7 +22,21 @@ class MainPresenter : ExpandListAdapter.Companion.ItemClickCallback{
             FeatureConstants.TAO_BAO_PURCHASE_TASK_TIME -> {
                 handleTaobaoPurchaseTaskTime()
             }
+            FeatureConstants.TAO_BAO_KEY_WORDS -> {
+                handleTaobaoKeyWords()
+            }
         }
+    }
+
+    private fun handleTaobaoKeyWords() {
+        TestDialogUtils.showInputDialog(mActivity, mActivity.getString(R.string.taobao_key_words_setting),
+                "", TaoBaoConfig.mKeyWords, object : TestDialogUtils.InputDialogCallback {
+            override fun onClick(inputText: String) {
+                TaoBaoConfig.setKeyWords(inputText)
+                Toast.makeText(mActivity, "修改成功", Toast.LENGTH_SHORT).show()
+            }
+
+        })
     }
 
     private fun handleTaobaoPurchaseTaskTime() {
