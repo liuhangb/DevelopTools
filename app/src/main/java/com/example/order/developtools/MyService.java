@@ -62,6 +62,7 @@ public class MyService extends AccessibilityService {
         addEventProcessor(taoBaoEventProcessor);
         MeituanEvaluationProcessor meituanEvaluationProcessor = new MeituanEvaluationProcessor(this);
         addEventProcessor(meituanEvaluationProcessor);
+        addEventProcessor(new KuShouEventProcessor(this));
     }
 
     @Override
