@@ -29,6 +29,26 @@ public class GestureActionUtils {
         Path path = new Path();
         path.moveTo(midX, start);
         path.lineTo(midX, end);
+        gestureBuilder.addStroke(new GestureDescription.StrokeDescription(path, 100, 500));
+        service.dispatchGesture(gestureBuilder.build(), callback, null);
+    }
+
+    /**
+     * 执行左右滑动操作
+     * @param service
+     * @param callback
+     */
+    public static void performSwipeX(AccessibilityService service, int start, int end, AccessibilityService.GestureResultCallback callback) {
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.N || service == null) {
+            return;
+        }
+        Context baseContext = service.getBaseContext();
+        DisplayMetrics displayMetrics = baseContext.getResources().getDisplayMetrics();
+        final int midY = displayMetrics.heightPixels / 2;
+        GestureDescription.Builder gestureBuilder =  new GestureDescription.Builder();
+        Path path = new Path();
+        path.moveTo(start, midY);
+        path.lineTo(end, midY);
         gestureBuilder.addStroke(new GestureDescription.StrokeDescription(path, 100, 1000));
         service.dispatchGesture(gestureBuilder.build(), callback, null);
     }
