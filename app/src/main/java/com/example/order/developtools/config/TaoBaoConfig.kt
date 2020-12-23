@@ -1,8 +1,7 @@
-package com.example.order.developtools
+package com.example.order.developtools.config
 
 import com.example.order.developtools.utils.DateUtils
 import com.example.order.developtools.utils.LogUtil
-import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 

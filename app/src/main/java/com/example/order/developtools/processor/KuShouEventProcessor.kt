@@ -1,15 +1,12 @@
-package com.example.order.developtools
+package com.example.order.developtools.processor
 
 import android.accessibilityservice.AccessibilityService
 import android.text.TextUtils
 import android.view.View
 import android.view.accessibility.AccessibilityEvent
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.LinearLayout
 import com.example.order.developtools.utils.GestureActionUtils
-import com.example.order.developtools.utils.LogUtil
-import com.example.order.developtools.utils.PrintUtils
 import java.util.*
 
 /**

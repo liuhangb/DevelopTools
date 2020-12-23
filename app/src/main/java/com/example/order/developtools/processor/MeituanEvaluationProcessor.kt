@@ -1,9 +1,7 @@
-package com.example.order.developtools
+package com.example.order.developtools.processor
 
 import android.accessibilityservice.AccessibilityService
-import android.accessibilityservice.GestureDescription
 import android.graphics.Rect
-import android.os.Build
 import android.os.Bundle
 import android.view.ViewGroup
 import android.view.accessibility.AccessibilityEvent
@@ -11,11 +9,8 @@ import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import com.example.order.developtools.utils.GestureActionUtils
 import com.example.order.developtools.utils.LogUtil
-import com.example.order.developtools.utils.PrintUtils
-import kotlin.math.sign
 
 /**
  * Created by lh, 2020/12/15
