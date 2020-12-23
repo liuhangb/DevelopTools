@@ -30,8 +30,6 @@ class KuShouEventProcessor(mService: AccessibilityService): BaseEventProcessor(m
                 Button::class.java.name)
         }
         else if (!isFoundRedPacket()){
-            val printNodeInfo = PrintUtils.printNodeInfoById(mService.rootInActiveWindow)
-            LogUtil.d("isFoundRedPacket: " + printNodeInfo)
             slideUp()
         }
 
@@ -39,7 +37,7 @@ class KuShouEventProcessor(mService: AccessibilityService): BaseEventProcessor(m
 
     private fun initTimerTask() {
         val timer = Timer()
-        timer.schedule(SlideJob(), 0, 12 * 1000)
+        timer.schedule(SlideJob(), 0, 5 * 1000)
     }
 
     private fun isFoundRedPacket(): Boolean {
