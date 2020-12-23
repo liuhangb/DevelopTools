@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
+import com.example.order.developtools.processor.DouYinEventProcessor;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,6 +65,7 @@ public class MyService extends AccessibilityService {
         MeituanEvaluationProcessor meituanEvaluationProcessor = new MeituanEvaluationProcessor(this);
         addEventProcessor(meituanEvaluationProcessor);
         addEventProcessor(new KuShouEventProcessor(this));
+        addEventProcessor(new DouYinEventProcessor(this));
     }
 
     @Override
