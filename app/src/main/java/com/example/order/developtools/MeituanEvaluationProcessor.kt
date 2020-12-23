@@ -71,9 +71,11 @@ class MeituanEvaluationProcessor(service: AccessibilityService) : BaseEventProce
 
     private fun processOrderList(rootInActiveWindow: AccessibilityNodeInfo) {
         LogUtil.d("processOrderList")
-        val takeOutTxtNodeInfo = findAccessibilityNodeInfosByViewId(rootInActiveWindow, "com.sankuai.meituan.takeoutnew:id/takeout_txt_tab", TextView::class.java.name)
+        val takeOutTxtNodeInfo = findAccessibilityNodeInfosByViewId(rootInActiveWindow,
+                "com.sankuai.meituan.takeoutnew:id/takeout_txt_tab", TextView::class.java.name) ?: return
         if (takeOutTxtNodeInfo?.isSelected != true) {
-            val findAccessibilityNodeInfosByViewId = findAccessibilityNodeInfosByViewId(rootInActiveWindow, "com.sankuai.meituan.takeoutnew:id/takeout_txt_tab", TextView::class.java.name)
+            val findAccessibilityNodeInfosByViewId = findAccessibilityNodeInfosByViewId(rootInActiveWindow,
+                    "com.sankuai.meituan.takeoutnew:id/takeout_txt_tab", TextView::class.java.name) ?: return
             performClick(findAccessibilityNodeInfosByViewId)
             return
         }
@@ -113,7 +115,8 @@ class MeituanEvaluationProcessor(service: AccessibilityService) : BaseEventProce
         }
 
 
-        val commentNodeInfo = findAccessibilityNodeInfosByViewId(rootInActiveWindow, "com.sankuai.meituan.takeoutnew:id/edit_comment", EditText::class.java.name)
+        val commentNodeInfo = findAccessibilityNodeInfosByViewId(rootInActiveWindow,
+                "com.sankuai.meituan.takeoutnew:id/edit_comment", EditText::class.java.name) ?: return
         if ("口味赞，包装好，推荐给大家" == commentNodeInfo.text) {
             val arguments = Bundle();
             arguments.putCharSequence(AccessibilityNodeInfo.ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE,
@@ -152,8 +155,9 @@ class MeituanEvaluationProcessor(service: AccessibilityService) : BaseEventProce
             return
         }
 
-        val findAccessibilityNodeInfosByViewId: AccessibilityNodeInfo = findAccessibilityNodeInfosByViewId(rootInActiveWindow, "com.sankuai.meituan.takeoutnew:id/rv_photos", "android.support.v7.widget.RecyclerView")
-        if (findAccessibilityNodeInfosByViewId?.childCount >= 2) {
+        val findAccessibilityNodeInfosByViewId: AccessibilityNodeInfo = findAccessibilityNodeInfosByViewId(rootInActiveWindow, "com.sankuai.meituan.takeoutnew:id/rv_photos",
+                "android.support.v7.widget.RecyclerView") ?: return
+        if (findAccessibilityNodeInfosByViewId.childCount >= 2) {
             val child: AccessibilityNodeInfo = findAccessibilityNodeInfosByViewId.getChild(1)
             clickById(child, "com.sankuai.meituan.takeoutnew:id/v_selected", ImageView::class.java.name)
         }
