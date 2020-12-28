@@ -14,6 +14,7 @@ class GroupData {
         fun getGroups(): List<Group> {
             var groups = ArrayList<Group>()
             groups.add(getFeaturesGroup())
+            groups.add(getSettingFeaturesGroup())
             return groups
         }
 
@@ -27,6 +28,14 @@ class GroupData {
             return group
         }
 
+        private fun getSettingFeaturesGroup(): Group {
+            var group = Group("设置", 3)
+            var childItems = ArrayList<ChildItem>()
+            childItems.add(ChildItem(getString(R.string.accessibility_settings), SettingConstants.ACTION_ACCESSIBILITY_SETTINGS))
+
+            group.childItems = childItems
+            return group
+        }
         private fun getString(resId: Int) :String {
             val application = DemoApplication.getApplication()
             return application.getString(resId)

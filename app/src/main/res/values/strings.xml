@@ -2,4 +2,7 @@
     <string name="app_name">developTools</string>
     <string name="taobao_purchase_task_time_setting">配置淘宝抢购定时任务时间</string>
     <string name="taobao_key_words_setting">配置淘宝抢购关键词</string>
+    <string name="accessibility_settings">启用辅助功能</string>
+    <string name="no_accessibility_setting">不存在辅助功能设置界面</string>
+
 </resources>
