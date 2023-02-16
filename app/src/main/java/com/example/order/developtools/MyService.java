@@ -36,7 +36,8 @@ public class MyService extends AccessibilityService {
         for (int i = 0; i < mEventProcessor.size(); i++) {
             BaseEventProcessor baseEventProcessor = mEventProcessor.get(i);
             CharSequence packageName = event.getPackageName();
-            if (baseEventProcessor.isEnable() && !TextUtils.isEmpty(packageName) && packageName.equals(baseEventProcessor.desiredPackageName())) {
+            if (baseEventProcessor.isEnable() && ((!TextUtils.isEmpty(packageName) && packageName.equals(baseEventProcessor.desiredPackageName()))
+                    || baseEventProcessor.isNeedAllEvent())) {
                 baseEventProcessor.onAccessibilityEvent(event);
             }
         }
