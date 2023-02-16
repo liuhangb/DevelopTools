@@ -65,17 +65,15 @@ class MeituanEvaluationProcessor(service: AccessibilityService) : BaseEventProce
     }
 
     private fun processOrderList(rootInActiveWindow: AccessibilityNodeInfo) {
-        LogUtil.d("processOrderList")
-        val takeOutTxtNodeInfo = findAccessibilityNodeInfosByViewId(rootInActiveWindow,
-                "com.sankuai.meituan.takeoutnew:id/takeout_txt_tab", TextView::class.java.name) ?: return
-        if (takeOutTxtNodeInfo?.isSelected != true) {
-            val findAccessibilityNodeInfosByViewId = findAccessibilityNodeInfosByViewId(rootInActiveWindow,
-                    "com.sankuai.meituan.takeoutnew:id/takeout_txt_tab", TextView::class.java.name) ?: return
-            performClick(findAccessibilityNodeInfosByViewId)
-            return
-        }
+        LogUtil.d("processOrderLfingerprintist")
+        val takeOutTxtNodeInfo = findAccessibilityNodeInfosByText(rootInActiveWindow,
+                "待评价", TextView::class.java.name) ?: return
+//        if (takeOutTxtNodeInfo?.isSelected != true) {
+//            performClick(takeOutTxtNodeInfo)
+//            return
+//        }
 
-        val btnOrderNodeInfo = findAccessibilityNodeInfosByText(rootInActiveWindow, "评价得33金豆", TextView::class.java.name)
+        val btnOrderNodeInfo = findAccessibilityNodeInfosByText(rootInActiveWindow, "评价得40金豆", TextView::class.java.name)
 
         btnOrderNodeInfo.performAction(AccessibilityNodeInfo.ACTION_CLICK)
     }
@@ -119,9 +117,9 @@ class MeituanEvaluationProcessor(service: AccessibilityService) : BaseEventProce
             commentNodeInfo.performAction(AccessibilityNodeInfo.ACTION_SET_TEXT, arguments)
         }
 
-        val isExitUploadPicHint = checkContentByText(rootInActiveWindow, "传图得 20 金豆", TextView::class.java.name)
+        val isExitUploadPicHint = checkContentByText(rootInActiveWindow, "传图得 10 金豆", TextView::class.java.name)
         if (isExitUploadPicHint) {
-            val findDestNodesByFlatNode = findDestNodesByFlatNode(rootInActiveWindow, "传图得 20 金豆", ViewGroup::class.java.name) ?: return
+            val findDestNodesByFlatNode = findDestNodesByFlatNode(rootInActiveWindow, "传图得 10 金豆", ViewGroup::class.java.name) ?: return
             if (findDestNodesByFlatNode.size > 0) {
                 findDestNodesByFlatNode[0].performAction(AccessibilityNodeInfo.ACTION_CLICK)
             }
@@ -137,7 +135,7 @@ class MeituanEvaluationProcessor(service: AccessibilityService) : BaseEventProce
             }
         }
 
-        val checkContentByText: Boolean = checkContentByText(rootInActiveWindow, "金豆 33", TextView::class.java.name)
+        val checkContentByText: Boolean = checkContentByText(rootInActiveWindow, "金豆 40", TextView::class.java.name)
         if (checkContentByText) {
             val findAccessibilityNodeInfosByText = findAccessibilityNodeInfosByText(rootInActiveWindow, "提交", TextView::class.java.name) ?: return
             performClick(findAccessibilityNodeInfosByText)
@@ -159,15 +157,9 @@ class MeituanEvaluationProcessor(service: AccessibilityService) : BaseEventProce
     }
 
     private fun processEvaluationFinish(rootInActiveWindow: AccessibilityNodeInfo) {
-        val findAccessibilityNodeInfosByText = findAccessibilityNodeInfosByText(rootInActiveWindow, "评价得33金豆", TextView::class.java.name) ?: return
+        val findAccessibilityNodeInfosByText = findAccessibilityNodeInfosByText(rootInActiveWindow, "评价得40金豆", TextView::class.java.name) ?: return
         performClick(findAccessibilityNodeInfosByText)
-        LogUtil.d("processEvaluationFinish 评价得33金豆")
-    }
-
-    private fun performClick(child: AccessibilityNodeInfo) {
-        val rect = Rect()
-        child.getBoundsInScreen(rect)
-        GestureActionUtils.performClick(mService, rect.centerX(), rect.centerY(), null)
+        LogUtil.d("processEvaluationFinish 评价得40金豆")
     }
 
 }
