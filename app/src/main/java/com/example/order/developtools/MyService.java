@@ -11,6 +11,7 @@ import com.example.order.developtools.processor.BaseEventProcessor;
 import com.example.order.developtools.processor.DouYinEventProcessor;
 import com.example.order.developtools.processor.KuShouEventProcessor;
 import com.example.order.developtools.processor.MeituanEvaluationProcessor;
+import com.example.order.developtools.processor.SkipAdProcessor;
 import com.example.order.developtools.processor.TaoBaoEventProcessor;
 
 import java.util.ArrayList;
@@ -71,6 +72,7 @@ public class MyService extends AccessibilityService {
         addEventProcessor(meituanEvaluationProcessor);
         addEventProcessor(new KuShouEventProcessor(this));
         addEventProcessor(new DouYinEventProcessor(this));
+        addEventProcessor(new SkipAdProcessor(this));
     }
 
     @Override
