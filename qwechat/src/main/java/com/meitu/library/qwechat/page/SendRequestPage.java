@@ -1,9 +1,12 @@
 package com.meitu.library.qwechat.page;
 
 import android.accessibilityservice.AccessibilityService;
+import android.text.TextUtils;
 import android.view.accessibility.AccessibilityNodeInfo;
+import android.widget.Toast;
 
 import com.meitu.library.qwechat.utils.NodeInfoParseUtil;
+import com.meitu.library.qwechat.utils.SharedPreferencesUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +69,12 @@ public class SendRequestPage implements IPage {
         if (b1aInfo != null) {
             if (!isContentFilled) {
                 isContentFilled = true;
-                NodeInfoParseUtil.editText(b1aInfo, "Hi, 我是LH");
+                String content = (String) SharedPreferencesUtils.getInstance(mService.getApplication()).get(SharedPreferencesUtils.KEY_ADD_FRIEND_INFO, "");
+                if (TextUtils.isEmpty(content)) {
+                    Toast.makeText(mService.getApplication(), "添加好友说明为空", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                NodeInfoParseUtil.editText(b1aInfo, content);
             }
         } else {
             AccessibilityNodeInfo b1cInfo = NodeInfoParseUtil.findAccessibilityNodeInfosByViewId(root, "com.tencent.wework:id/b23", "android.widget.ImageView");
