@@ -4,6 +4,7 @@ import android.accessibilityservice.AccessibilityService;
 import android.view.accessibility.AccessibilityNodeInfo;
 
 import com.meitu.library.qwechat.utils.NodeInfoParseUtil;
+import com.meitu.library.qwechat.utils.ThreadUtils;
 
 /**
  * Created by lh, 2023/3/13
@@ -21,6 +22,8 @@ public class AddContactPage implements IPage {
             isSendPageFinished = true;
         } else if (lastPage instanceof FriendListPage) {
             isAddContactBtnClicked = false;
+            isSendPageFinished = false;
+        } else if (lastPage instanceof FeatureBiddenPage) {
             isSendPageFinished = false;
         }
         isFinished = false;
@@ -64,7 +67,16 @@ public class AddContactPage implements IPage {
         AccessibilityNodeInfo b2bInfo = NodeInfoParseUtil.findAccessibilityNodeInfosByViewId(root, "com.tencent.wework:id/b32", "android.widget.TextView");
         if (b2bInfo == null) return;
         isAddContactBtnClicked = true;
-//        NodeInfoParseUtil.performClick(b2bInfo, mService);
+        NodeInfoParseUtil.performClick(b2bInfo, mService);
+        ThreadUtils.runOnMainUI(new Runnable() {
+            @Override
+            public void run() {
+                if (!isFinished) {
+                    // 跳转失败, 直接返回
+                    clickBack(root);
+                }
+            }
+        }, 10 * 1000);
     }
 
     /**

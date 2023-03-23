@@ -39,7 +39,7 @@ public class NodeInfoParseUtil {
                         // 可用则模拟点击
                         if (node.isEnabled()) {
 //                            node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
-                            Toast.makeText(context, "辅助功能已经检测到: "+ text, Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(context, "辅助功能已经检测到: "+ text, Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
@@ -62,7 +62,7 @@ public class NodeInfoParseUtil {
                         // 可用则模拟点击
                         if (node.isEnabled()) {
                             node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
-                            Toast.makeText(context, "辅助功能已经检测到: "+ id, Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(context, "辅助功能已经检测到: "+ id, Toast.LENGTH_SHORT).show();
                             return true;
                         }
                     }
@@ -95,7 +95,7 @@ public class NodeInfoParseUtil {
                         // 可用则模拟点击
                         if (node.isEnabled()) {
                             node.performAction(action);
-                            Toast.makeText(context, "辅助功能已经检测到: "+ id, Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(context, "辅助功能已经检测到: "+ id, Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
@@ -124,7 +124,7 @@ public class NodeInfoParseUtil {
                     if (node.getClassName().equals(widgetType)) {
                         // 可用则模拟点击
                         if (node.isEnabled()) {
-                            Toast.makeText(context, "辅助功能已经检测到: "+ text, Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(context, "辅助功能已经检测到: "+ text, Toast.LENGTH_SHORT).show();
                             return true;
                         }
                     }
@@ -154,7 +154,7 @@ public class NodeInfoParseUtil {
                     if (node.getClassName().equals(widgetType)) {
                         // 可用则模拟点击
                         if (node.isEnabled()) {
-                            Toast.makeText(context, "辅助功能已经检测到: "+ text, Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(context, "辅助功能已经检测到: "+ text, Toast.LENGTH_SHORT).show();
                             return true;
                         }
                     }
@@ -208,7 +208,7 @@ public class NodeInfoParseUtil {
                         // 可用则模拟点击
                         if (node.isEnabled() && node.isClickable()) {
                             node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
-                            Toast.makeText(context, "辅助功能已经检测到: "+ text, Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(context, "辅助功能已经检测到: "+ text, Toast.LENGTH_SHORT).show();
                             return true;
                         }
                     }
@@ -431,7 +431,7 @@ public class NodeInfoParseUtil {
         }
 
         LogUtil.d("performClick: " + child);
-        Toast.makeText(service.getBaseContext(), "点击了: " + (child.getText() != null ? child.getText().toString() : ""), Toast.LENGTH_LONG).show();
+//        Toast.makeText(service.getBaseContext(), "点击了: " + (child.getText() != null ? child.getText().toString() : ""), Toast.LENGTH_LONG).show();
         Rect rect = new Rect();
         child.getBoundsInScreen(rect);
         GestureActionUtils.performClick(service, rect.centerX(), rect.centerY(), new AccessibilityService.GestureResultCallback() {

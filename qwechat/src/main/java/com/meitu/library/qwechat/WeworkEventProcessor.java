@@ -8,10 +8,12 @@ import androidx.annotation.NonNull;
 
 import com.meitu.library.qwechat.page.AddContactPage;
 import com.meitu.library.qwechat.page.ClientInfoPage;
+import com.meitu.library.qwechat.page.FeatureBiddenPage;
 import com.meitu.library.qwechat.page.FriendListPage;
 import com.meitu.library.qwechat.page.IPage;
 import com.meitu.library.qwechat.page.SendRequestPage;
 import com.meitu.library.qwechat.utils.LogUtil;
+import com.meitu.library.qwechat.utils.SharedPreferencesUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +35,7 @@ public class WeworkEventProcessor extends BaseEventProcessor{
         mPageList.add(new FriendListPage());
         mPageList.add(addContactPage);
         mPageList.add(new ClientInfoPage());
+        mPageList.add(new FeatureBiddenPage());
     }
 
     @Override

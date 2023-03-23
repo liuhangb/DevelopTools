@@ -108,6 +108,7 @@ public class FriendListPage extends AccessibilityService.GestureResultCallback i
                 mLastClickTime = System.currentTimeMillis();
                 isClicking = true;
                 NodeInfoParseUtil.performClick(targetInfo, mService, this);
+
                 return true;
             }
         }

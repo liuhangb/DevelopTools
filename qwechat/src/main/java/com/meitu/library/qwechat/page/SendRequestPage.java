@@ -19,10 +19,14 @@ public class SendRequestPage implements IPage {
     private boolean isEditIconClicked;
     private boolean isContentFilled;
     private boolean isSendReqClicked;
+    private boolean isSendReqException;
 
     @Override
     public void onVisible(AccessibilityService service, IPage lastPage) {
         mService = service;
+        if (lastPage instanceof FeatureBiddenPage) {
+            isSendReqException = true;
+        }
     }
 
     @Override
@@ -31,11 +35,15 @@ public class SendRequestPage implements IPage {
         isEditIconClicked = false;
         isSendReqClicked = false;
         isContentFilled = false;
+        isSendReqException = false;
     }
 
     @Override
     public void onHandleEvent(AccessibilityNodeInfo root) {
         if (isSendReqClicked) {
+            return;
+        } else if (isSendReqException) {
+            clickBack(root);
             return;
         }
 
@@ -89,6 +97,11 @@ public class SendRequestPage implements IPage {
         if (e7oInfo == null) return;
         isSendReqClicked = true;
 
-//        NodeInfoParseUtil.performClick(e7oInfo, mService);
+        NodeInfoParseUtil.performClick(e7oInfo, mService);
+    }
+
+    private void clickBack(AccessibilityNodeInfo root) {
+        AccessibilityNodeInfo nodeInfo = NodeInfoParseUtil.findAccessibilityNodeInfosByViewId(root, "com.tencent.wework:id/e8i", "android.widget.ImageView");
+        NodeInfoParseUtil.performClick(nodeInfo, mService);
     }
 }
