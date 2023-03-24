@@ -12,11 +12,13 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.meitu.library.qwechat.utils.SharedPreferencesUtils;
 
 public class MainActivity extends AppCompatActivity {
+    private TextView mHintTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Intent intent = new Intent(this, MyService.class);
         MainActivity.this.startService(intent);
+        mHintTv = findViewById(R.id.hint_tv);
         EditText editText = findViewById(R.id.add_friend_info);
         String addInfo = (String) SharedPreferencesUtils.getInstance(this).get(KEY_ADD_FRIEND_INFO, "");
         if (!TextUtils.isEmpty(addInfo)) {
@@ -58,5 +61,21 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             Toast.makeText(this, getString(R.string.no_accessibility_setting), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mHintTv != null) {
+            mHintTv.setText(getHint());
+        }
+    }
+
+    private String getHint() {
+       if (WeworkEventProcessor.isUnableAddFriend) {
+           return "被限制添加好友";
+       } else {
+           return "";
+       }
     }
 }
