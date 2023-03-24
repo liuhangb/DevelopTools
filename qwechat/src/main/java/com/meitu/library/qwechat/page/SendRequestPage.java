@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.Toast;
 
+import com.meitu.library.qwechat.utils.LogUtil;
 import com.meitu.library.qwechat.utils.NodeInfoParseUtil;
 import com.meitu.library.qwechat.utils.SharedPreferencesUtils;
 
@@ -47,11 +48,9 @@ public class SendRequestPage implements IPage {
             clickBack(root);
             return;
         }
-
+        updateRequestContent(root);
         if (isContentFilled) {
             sendFriendRequest(root);
-        } else {
-            updateRequestContent(root);
         }
     }
 
@@ -97,7 +96,7 @@ public class SendRequestPage implements IPage {
         AccessibilityNodeInfo e7oInfo = NodeInfoParseUtil.findAccessibilityNodeInfosByViewId(root, "com.tencent.wework:id/e8w", "android.widget.TextView");
         if (e7oInfo == null) return;
         isSendReqClicked = true;
-
+        LogUtil.d("sendFriendRequest");
         NodeInfoParseUtil.performClick(e7oInfo, mService);
     }
 

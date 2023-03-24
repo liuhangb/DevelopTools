@@ -13,6 +13,7 @@ import com.meitu.library.qwechat.page.FriendListPage;
 import com.meitu.library.qwechat.page.IPage;
 import com.meitu.library.qwechat.page.SendRequestPage;
 import com.meitu.library.qwechat.utils.LogUtil;
+import com.meitu.library.qwechat.utils.ThreadUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,7 @@ public class WeworkEventProcessor extends BaseEventProcessor{
     private IPage mCurrentPage = null;
     private List<IPage> mPageList = new ArrayList<>();
     public static boolean isUnableAddFriend;
+    private boolean mIsHandleDelayEvent;
 
     public WeworkEventProcessor(@NonNull AccessibilityService service) {
         super(service);
@@ -49,6 +51,21 @@ public class WeworkEventProcessor extends BaseEventProcessor{
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
+        if (mIsHandleDelayEvent) {
+            LogUtil.d("ignore event:" + event.toString());
+            return;
+        }
+        mIsHandleDelayEvent = true;
+        ThreadUtils.runOnMainUI(new Runnable() {
+            @Override
+            public void run() {
+                handleEventAfterDelay();
+                mIsHandleDelayEvent = false;
+            }
+        }, 2 * 1000);
+    }
+
+    private void handleEventAfterDelay() {
         AccessibilityNodeInfo rootInActiveWindow = mService.getRootInActiveWindow();
         if (rootInActiveWindow == null) {
             LogUtil.e(TAG, "rootInActiveWindow == null");
