@@ -13,6 +13,7 @@ import java.util.List;
 
 /**
  * Created by lh, 2023/3/13
+ * 发送好友申请页面
  */
 public class SendRequestPage implements IPage {
     private AccessibilityService mService;

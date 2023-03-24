@@ -7,6 +7,7 @@ import com.meitu.library.qwechat.utils.NodeInfoParseUtil;
 
 /**
  * Created by lh, 2023/3/13
+ * 好友信息页面
  */
 public class ClientInfoPage implements IPage{
     private AccessibilityService mService;

@@ -7,6 +7,7 @@ import com.meitu.library.qwechat.utils.NodeInfoParseUtil;
 
 /**
  * Created by lh, 2023/3/23
+ * 限制加好友弹窗
  */
 public class FeatureBiddenPage extends AccessibilityService.GestureResultCallback implements IPage{
     private AccessibilityService mService;

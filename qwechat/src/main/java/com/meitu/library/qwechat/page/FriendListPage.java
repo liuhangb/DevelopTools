@@ -20,6 +20,7 @@ import java.util.List;
 
 /**
  * Created by lh, 2023/3/13
+ * 群成员列表
  */
 public class FriendListPage extends AccessibilityService.GestureResultCallback implements IPage{
     private List<String> mOldUserList= new ArrayList<>();
