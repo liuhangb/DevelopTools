@@ -18,7 +18,7 @@
             </intent-filter>
         </activity>
         <service android:name=".MyService"
-            android:label="企业微信辅助功能By Lh"
+            android:label="企微辅助·Lh"
             android:enabled="true"
             android:exported="true"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
