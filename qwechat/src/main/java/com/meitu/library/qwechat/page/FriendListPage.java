@@ -6,11 +6,9 @@ import android.graphics.Rect;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.accessibility.AccessibilityNodeInfo;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.meitu.library.qwechat.R;
 import com.meitu.library.qwechat.utils.GestureActionUtils;
 import com.meitu.library.qwechat.utils.LogUtil;
 import com.meitu.library.qwechat.utils.NodeInfoParseUtil;
@@ -25,8 +23,6 @@ import java.util.List;
 public class FriendListPage extends AccessibilityService.GestureResultCallback implements IPage{
     private List<String> mOldUserList= new ArrayList<>();
     private AccessibilityService mService;
-    private long mLastClickTime = 0;
-    private boolean isFindTargetUser;
     private boolean isClicking;
 
     @Override
@@ -37,7 +33,6 @@ public class FriendListPage extends AccessibilityService.GestureResultCallback i
     @Override
     public void onInvisible() {
         mService = null;
-        isFindTargetUser = false;
     }
 
     @Override
@@ -105,8 +100,6 @@ public class FriendListPage extends AccessibilityService.GestureResultCallback i
                     continue;
                 }
                 updateOldUserList(child);
-                isFindTargetUser = true;
-                mLastClickTime = System.currentTimeMillis();
                 isClicking = true;
                 NodeInfoParseUtil.performClick(targetInfo, mService, this);
 

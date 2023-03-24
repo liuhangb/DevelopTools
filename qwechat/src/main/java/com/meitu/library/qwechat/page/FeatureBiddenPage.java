@@ -3,6 +3,7 @@ package com.meitu.library.qwechat.page;
 import android.accessibilityservice.AccessibilityService;
 import android.view.accessibility.AccessibilityNodeInfo;
 
+import com.meitu.library.qwechat.WeworkEventProcessor;
 import com.meitu.library.qwechat.utils.NodeInfoParseUtil;
 
 /**
@@ -25,6 +26,7 @@ public class FeatureBiddenPage extends AccessibilityService.GestureResultCallbac
     public void onHandleEvent(AccessibilityNodeInfo root) {
         AccessibilityNodeInfo nodeInfo = NodeInfoParseUtil.findAccessibilityNodeInfosByViewId(root, "com.tencent.wework:id/cjw", "android.widget.TextView");
         NodeInfoParseUtil.performClick(nodeInfo, mService);
+        WeworkEventProcessor.isUnableAddFriend = true;
     }
 
     @Override

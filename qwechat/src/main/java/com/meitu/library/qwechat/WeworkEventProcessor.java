@@ -13,7 +13,6 @@ import com.meitu.library.qwechat.page.FriendListPage;
 import com.meitu.library.qwechat.page.IPage;
 import com.meitu.library.qwechat.page.SendRequestPage;
 import com.meitu.library.qwechat.utils.LogUtil;
-import com.meitu.library.qwechat.utils.SharedPreferencesUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +24,7 @@ public class WeworkEventProcessor extends BaseEventProcessor{
     private final String TAG = "WeworkEventProcessor";
     private IPage mCurrentPage = null;
     private List<IPage> mPageList = new ArrayList<>();
-    private long mLastTime;
+    public static boolean isUnableAddFriend;
 
     public WeworkEventProcessor(@NonNull AccessibilityService service) {
         super(service);
@@ -40,7 +39,7 @@ public class WeworkEventProcessor extends BaseEventProcessor{
 
     @Override
     public boolean isEnable() {
-        return true;
+        return !isUnableAddFriend;
     }
 
     @Override
@@ -64,7 +63,6 @@ public class WeworkEventProcessor extends BaseEventProcessor{
 //        else if (mCurrentPage == currentPage && System.currentTimeMillis() - mLastTime <= 3000){
 //            return;
 //        }
-        mLastTime = System.currentTimeMillis();
         currentPage.onVisible(mService, mCurrentPage);
         mCurrentPage = currentPage;
         mCurrentPage.onHandleEvent(rootInActiveWindow);
