@@ -18,7 +18,7 @@
             </intent-filter>
         </activity>
         <service android:name=".MyService"
-            android:label="企微辅助·Lh"
+            android:label="企微助手·Lh"
             android:enabled="true"
             android:exported="true"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">企微辅助</string>
+    <string name="app_name">企微助手</string>
     <string name="accessibility_settings">启用辅助功能</string>
     <string name="no_accessibility_setting">不存在辅助功能设置界面</string>
 </resources>
