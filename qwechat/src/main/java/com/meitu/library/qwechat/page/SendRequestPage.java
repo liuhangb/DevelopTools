@@ -83,7 +83,7 @@ public class SendRequestPage implements IPage {
             return false;
         }
         String content = getAddFriendInfo();
-        return !content.equals(b22Info.getText());
+        return content.isEmpty() || !content.equals(b22Info.getText());
     }
 
     /**
