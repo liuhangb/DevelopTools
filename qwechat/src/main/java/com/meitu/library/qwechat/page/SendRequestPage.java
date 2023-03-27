@@ -48,7 +48,11 @@ public class SendRequestPage implements IPage {
             clickBack(root);
             return;
         }
-        updateRequestContent(root);
+        if (!isNeedUpdateAddFriendInfo(root))  {
+            isContentFilled = true;
+        } else {
+            updateRequestContent(root);
+        }
         if (isContentFilled) {
             sendFriendRequest(root);
         }
@@ -68,6 +72,20 @@ public class SendRequestPage implements IPage {
         return e7oInfo != null && "发送申请".equals(e7oInfo.getText().toString());
     }
 
+    private String getAddFriendInfo() {
+        String content = (String) SharedPreferencesUtils.getInstance(mService.getApplication()).get(SharedPreferencesUtils.KEY_ADD_FRIEND_INFO, "");
+        return content;
+    }
+
+    private boolean isNeedUpdateAddFriendInfo(AccessibilityNodeInfo nodeInfo) {
+        AccessibilityNodeInfo b22Info = NodeInfoParseUtil.findAccessibilityNodeInfosByViewId(nodeInfo, "com.tencent.wework:id/b22", "android.widget.TextView");
+        if (b22Info == null) {
+            return false;
+        }
+        String content = getAddFriendInfo();
+        return !content.equals(b22Info.getText());
+    }
+
     /**
      * 修改好友请求内容
      * @param root
@@ -77,7 +95,7 @@ public class SendRequestPage implements IPage {
         if (b1aInfo != null) {
             if (!isContentFilled) {
                 isContentFilled = true;
-                String content = (String) SharedPreferencesUtils.getInstance(mService.getApplication()).get(SharedPreferencesUtils.KEY_ADD_FRIEND_INFO, "");
+                String content = getAddFriendInfo();
                 if (TextUtils.isEmpty(content)) {
                     Toast.makeText(mService.getApplication(), "添加好友说明为空", Toast.LENGTH_SHORT).show();
                     return;
