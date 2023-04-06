@@ -17,6 +17,7 @@ import com.meitu.library.qwechat.utils.ThreadUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by lh, 2023/2/16
@@ -62,7 +63,13 @@ public class WeworkEventProcessor extends BaseEventProcessor{
                 handleEventAfterDelay();
                 mIsHandleDelayEvent = false;
             }
-        }, 2 * 1000);
+        }, getDelayTime());
+    }
+
+    private int getDelayTime() {
+        int value = (new Random().nextInt(4) + 2) * 1000;
+        LogUtil.d("getDelayTime:" + value);
+        return value;
     }
 
     private void handleEventAfterDelay() {
