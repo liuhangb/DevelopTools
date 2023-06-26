@@ -67,9 +67,26 @@ public class WeworkEventProcessor extends BaseEventProcessor{
     }
 
     private int getDelayTime() {
-        int value = (new Random().nextInt(4) + 2) * 1000;
+        IPage currentPage = getCurrentPage();
+        int baseTime;
+        if (currentPage instanceof AddContactPage || currentPage instanceof SendRequestPage) {
+            baseTime = 4;
+        } else {
+            baseTime = 2;
+        }
+        int value = (new Random().nextInt(4) + baseTime) * 1000;
         LogUtil.d("getDelayTime:" + value);
         return value;
+    }
+
+    private IPage getCurrentPage() {
+        AccessibilityNodeInfo rootInActiveWindow = mService.getRootInActiveWindow();
+        if (rootInActiveWindow == null) {
+            LogUtil.e(TAG, "rootInActiveWindow == null");
+            return null;
+        }
+        IPage currentPage = findCurrentPage(rootInActiveWindow);
+        return currentPage;
     }
 
     private void handleEventAfterDelay() {
@@ -78,7 +95,7 @@ public class WeworkEventProcessor extends BaseEventProcessor{
             LogUtil.e(TAG, "rootInActiveWindow == null");
             return;
         }
-        IPage currentPage = findCurrentPage(rootInActiveWindow);
+        IPage currentPage = getCurrentPage();
         if (currentPage == null) return;
 
         if (mCurrentPage != null && mCurrentPage != currentPage) {
